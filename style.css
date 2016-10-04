@@ -15,6 +15,7 @@ body {
     background-color: rgb(47, 128, 50);
     width: 100%;
     height: 100px;
+    color: white;
 }
 
 .road {
@@ -29,7 +30,7 @@ body {
     width: 100px;
     height: 50px;
     background-color: white;
-    margin-top: 0px;
+    margin-top: 50px;
 }
 
 .wall {

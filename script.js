@@ -2,6 +2,9 @@
 var c = 0;
 
 var aiPos = 0;
+var walls = 0;
+var avoided = 0;
+var crash = 0;
 
 function tick() {
     c++;
@@ -18,7 +21,7 @@ function runSim(state) {
         if (c > 100) {
             runSim('0'); //force stop
         } else {
-            tickInterval = setInterval("tick();", 100);
+            tickInterval = setInterval("tick();", 20);
         }
     } else {//stop simulation
         clearInterval(tickInterval);
@@ -26,8 +29,11 @@ function runSim(state) {
         document.getElementById('stepsDone').value = c;
         document.getElementById('wall').style.left = null;
         document.getElementById('wall').style.right = '0px';
-        document.getElementById('ai').style.marginTop = '0px';
+        document.getElementById('ai').style.marginTop = '50px';
         aiPos = 0;
+        walls = 0;
+        avoided = 0;
+        crash = 0;
     }
 }
 
@@ -35,8 +41,16 @@ function moveWall() {
     var getWallX = document.getElementById('wall').offsetLeft;
     var getWallY = document.getElementById('wall').offsetTop;
 
-    document.getElementById('debugTextArea').innerHTML += '[' + c + '] Wall PosX: ' + getWallX + ' | Wall PosY: ' + getWallY + '\n';
-    document.getElementById('debugTextArea').scrollTop = document.getElementById('debugTextArea').scrollHeight;
+    // document.getElementById('debugTextArea').innerHTML += '[' + c + '] Wall PosX: ' + getWallX + ' | Wall PosY: ' + getWallY + '\n';
+    // document.getElementById('debugTextArea').scrollTop = document.getElementById('debugTextArea').scrollHeight;
+    var getAIX = document.getElementById('sensor2').offsetLeft+500;
+    var getAIY = document.getElementById('ai').offsetTop;
+
+    // we'll use this variable to teach the AI that it needs to obtain value as close to 100 as possible
+    var successRate = Math.floor((avoided / (avoided + crash) * 100));
+
+    document.getElementById('topDebug').innerHTML = '&nbsp; [' + c + ']<br>&nbsp;Wall (' + getWallX + ', ' + getWallY +
+    ')<br>&nbsp;AI (' + getAIX + ', ' + getAIY + ')<br>&nbspWalls: ' + walls + ' Avoided: ' + avoided + ' Crash: ' + crash + ' Success rate: ' + successRate + '%';
 
     if (getWallX <= 0) {
         var randomWallYPos = Math.floor(Math.random() * (200 + 1) + 0);
@@ -44,18 +58,20 @@ function moveWall() {
 
         document.getElementById('wall').style.left = null;
         document.getElementById('wall').style.right = '0px';
+
+        walls++;
     } else {
-        getWallX = getWallX - 40;
+        getWallX = getWallX - 20;
         document.getElementById('wall').style.left = getWallX + 'px';
     }
 }
 
 function moveCar(direction) {
-    if (aiPos < 0) {
-        aiPos = 0;
+    if (aiPos < 50) {
+        aiPos = 50;
     }
-    if (aiPos > 250) {
-        aiPos = 250;
+    if (aiPos > 200) {
+        aiPos = 20;
     }
 
     if (direction == 'down') {
@@ -77,7 +93,14 @@ function checkCollision() {
     if (getWallX < getAIX && getAIY >= getWallY -100 && getAIY < getWallY || getWallX < getAIX && getWallY - 100 > getAIY && getWallY - 100 < getAIY + 50) {
         moveCar('down');
         document.getElementById('sensor2').style.backgroundColor = 'red';
+
+        if (getWallX < 100) {
+            crash++;
+        }
     } else {
         document.getElementById('sensor2').style.backgroundColor = 'white';
+        if (getWallX < 100) {
+            avoided++;
+        }
     }
 }
