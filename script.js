@@ -49,6 +49,16 @@ function moveWall() {
     // we'll use this variable to teach the AI that it needs to obtain value as close to 100 as possible
     var successRate = Math.floor((avoided / (avoided + crash) * 100));
 
+    var getWallCenter = (getWallY - 100) +50;
+    alert(getWallCenter);
+
+
+    if (getWallCenter <= 150) {
+        // zone 0
+    } else {
+        // zone 1
+    }
+
     document.getElementById('topDebug').innerHTML = '&nbsp; [' + c + ']<br>&nbsp;Wall (' + getWallX + ', ' + getWallY +
     ')<br>&nbsp;AI (' + getAIX + ', ' + getAIY + ')<br>&nbspWalls: ' + walls + ' Avoided: ' + avoided + ' Crash: ' + crash + ' Success rate: ' + successRate + '%';
 
