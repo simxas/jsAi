@@ -50,8 +50,6 @@ function moveWall() {
     var successRate = Math.floor((avoided / (avoided + crash) * 100));
 
     var getWallCenter = (getWallY - 100) +50;
-    alert(getWallCenter);
-
 
     if (getWallCenter <= 150) {
         // zone 0
